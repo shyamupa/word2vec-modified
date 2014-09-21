@@ -279,7 +279,7 @@ int main(int argc, char **argv) {
 	}
       fprintf(out,"\n");
       // printf("\n");
-      if(cnt++ % 10000 == 0)
+      if(cnt++ % 100 == 0)
 	printf("DONE %ld\n",cnt);
     }
   fclose(out);
