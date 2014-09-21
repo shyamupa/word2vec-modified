@@ -20,7 +20,8 @@
 
 
 const long long max_size = 2000;         // max length of strings
-const long long N = 40;                  // number of closest words that will be shown
+const long long N = 10;                  // number of closest words that will be shown
+// const long long N = 40;                  // number of closest words that will be shown
 const long long max_w = 50;              // max length of vocabulary entries
 
 int main(int argc, char **argv) {
@@ -114,6 +115,9 @@ int main(int argc, char **argv) {
     }
     if (b == -1) continue;
     printf("\n                                              Word       Cosine distance\n------------------------------------------------------------------------\n");
+
+    begin = time(NULL);
+
     for (a = 0; a < size; a++) vec[a] = 0;
     for (b = 0; b < cn; b++) {
       if (bi[b] == -1) continue;
@@ -143,6 +147,9 @@ int main(int argc, char **argv) {
         }
       }
     }
+    end = time(NULL);
+    time_spent = (end - begin);
+    printf("Answered! in %ld secs\n",(long) time_spent);
     for (a = 0; a < N; a++) printf("%50s\t\t%f\n", bestw[a], bestd[a]);
   }
   return 0;
