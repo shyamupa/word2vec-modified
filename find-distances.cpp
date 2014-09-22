@@ -28,19 +28,17 @@ const long long max_size = 5000;         // max length of strings
 const long long N = 10;            // number of closest words that will be shown
 const long long max_w = 500;              // max length of vocabulary entries
 
-float* getSimilar(char st1[max_size], float *M, char *vocab, long long words,
-		long long size, char *bestw[N]) {
-	if (strcmp(st1, "EXIT") == 0)
-		return NULL;
-	char* ans_buf = (char*) malloc(sizeof(char) * (max_size + 1));
+int getSimilar(char st1[max_size], float *M, char *vocab, long long words,
+		  long long size, float* bestd, char *bestw[N]) {
+	// if (strcmp(st1, "EXIT") == 0)
+	// 	return NULL;
+	// char* ans_buf = (char*) malloc(sizeof(char) * (max_size + 1));
 	int ans_length = 0;
 
 	char file_name[max_size], st[100][max_size];
 	long long a, b, c, d, cn, bi[100];
 	float dist, len, vec[max_size];
-	float* bestd = (float*) malloc(sizeof(float) * N);
-	for (a = 0; a < N; a++)
-		bestd[a] = 0;
+	
 	for (a = 0; a < N; a++)
 		bestw[a][0] = 0;
 	// printf("Enter word or sentence (EXIT to break): ");
@@ -72,7 +70,7 @@ float* getSimilar(char st1[max_size], float *M, char *vocab, long long words,
 		// printf("\nWord: %s  Position in vocabulary: %lld\n", st[a], bi[a]);
 		if (b == -1) {
 		  printf("Out of dictionary word! : %s\n",st1);
-		  return NULL;
+		  return -1;
 		}
 	}
 	// printf(
@@ -117,15 +115,15 @@ float* getSimilar(char st1[max_size], float *M, char *vocab, long long words,
 			}
 		}
 	}
-	for (a = 0; a < N; a++) {
-		ans_length += snprintf(ans_buf + ans_length, max_size - ans_length,
-				"%50s\t\t%f\n", bestw[a], bestd[a]);
-//		printf("%50s\t\t%f\n", bestw[a], bestd[a]);
-	}
+// 	for (a = 0; a < N; a++) {
+// 		ans_length += snprintf(ans_buf + ans_length, max_size - ans_length,
+// 				"%50s\t\t%f\n", bestw[a], bestd[a]);
+// //		printf("%50s\t\t%f\n", bestw[a], bestd[a]);
+// 	}
 	// printf("WRITTEN!\n");
 	// return ans_buf;
 	// printf(ans_buf);
-	return bestd;
+	return 1;
 	
 }
 
@@ -211,7 +209,7 @@ int main(int argc, char **argv) {
   char st1[max_size];
   char *bestw[N];
   char file_name[max_size], st[100][max_size], title[max_size];
-  float dist, len, bestd[N], vec[max_size];
+  float dist, len, vec[max_size];
   long long words, size, a, b, c, d, cn, bi[100];
   char ch;
   float *M;
@@ -262,16 +260,22 @@ int main(int argc, char **argv) {
   FILE* out = fopen(argv[3],"w");
   using namespace std;
   long cnt=0;
+
+  float* bestd = (float*) malloc(sizeof(float) * N);
+  int rv;
   while(true)
     { 
       cin >> title;
+      
       if( cin.eof() ) break;
       // cout << title << endl;
       // t0 = t1;
-      float* bestd=getSimilar(title, M, vocab,words,size, bestw);
+      for (a = 0; a < N; a++)
+	bestd[a] = 0;
+      rv=getSimilar(title, M, vocab,words,size, bestd, bestw);
       // t1 = time(NULL);
       // printf("Time taken to answer %ld sec\n",(long)(t1-t0));
-      if(bestd==NULL)
+      if(rv==-1)
 	{
 	  fprintf(out,"OUT_OF_DICT %s\n",title);
 	  continue;
@@ -285,7 +289,7 @@ int main(int argc, char **argv) {
 	}
       fprintf(out,"\n");
       // printf("\n");
-      if(cnt++ % 100 == 0)
+      if(cnt++ % 1000 == 0)
 	printf("DONE %ld\n",cnt);
     }
   fclose(out);
