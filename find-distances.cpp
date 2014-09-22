@@ -30,9 +30,6 @@ const long long max_w = 500;              // max length of vocabulary entries
 
 int getSimilar(char st1[max_size], float *M, char *vocab, long long words,
 		  long long size, float* bestd, char *bestw[N]) {
-	// if (strcmp(st1, "EXIT") == 0)
-	// 	return NULL;
-	// char* ans_buf = (char*) malloc(sizeof(char) * (max_size + 1));
 	int ans_length = 0;
 
 	char file_name[max_size], st[100][max_size];
@@ -41,7 +38,6 @@ int getSimilar(char st1[max_size], float *M, char *vocab, long long words,
 	
 	for (a = 0; a < N; a++)
 		bestw[a][0] = 0;
-	// printf("Enter word or sentence (EXIT to break): ");
 	a = 0;
 	cn = 0;
 	b = 0;
@@ -67,14 +63,11 @@ int getSimilar(char st1[max_size], float *M, char *vocab, long long words,
 		if (b == words)
 			b = -1;
 		bi[a] = b;
-		// printf("\nWord: %s  Position in vocabulary: %lld\n", st[a], bi[a]);
 		if (b == -1) {
 		  printf("Out of dictionary word! : %s\n",st1);
 		  return -1;
 		}
 	}
-	// printf(
-			// "\n                                              Word       Cosine distance\n------------------------------------------------------------------------\n");
 	for (a = 0; a < size; a++)
 		vec[a] = 0;
 	for (b = 0; b < cn; b++) {
@@ -115,94 +108,9 @@ int getSimilar(char st1[max_size], float *M, char *vocab, long long words,
 			}
 		}
 	}
-// 	for (a = 0; a < N; a++) {
-// 		ans_length += snprintf(ans_buf + ans_length, max_size - ans_length,
-// 				"%50s\t\t%f\n", bestw[a], bestd[a]);
-// //		printf("%50s\t\t%f\n", bestw[a], bestd[a]);
-// 	}
-	// printf("WRITTEN!\n");
-	// return ans_buf;
-	// printf(ans_buf);
 	return 1;
 	
 }
-
-// void server(float *M, char *vocab, long long words, long long size,
-// 		char *bestw[N]) {
-// 	char* ans;
-
-// 	int sockfd, newsockfd, portno;
-// 	char st1[max_size];
-
-// 	socklen_t clilen;
-// 	struct sockaddr_in serv_addr, cli_addr;
-// 	int n;
-
-// 	/* First call to socket() function */
-// 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
-// 	if (sockfd < 0) {
-// 		perror("ERROR opening socket");
-// 		exit(1);
-// 	}
-// 	/* Initialize socket structure */
-// 	bzero((char *) &serv_addr, sizeof(serv_addr));
-// 	portno = 5001;
-// 	serv_addr.sin_family = AF_INET;
-// 	serv_addr.sin_addr.s_addr = INADDR_ANY;
-// 	serv_addr.sin_port = htons(portno);
-
-// 	/* Now bind the host address using bind() call.*/
-// 	if (bind(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
-// 		perror("ERROR on binding");
-// 		exit(1);
-// 	}
-
-// 	/* Now start listening for the clients, here process will
-// 	 * go in sleep mode and will wait for the incoming connection
-// 	 */
-// 	listen(sockfd, 5);
-// 	clilen = sizeof(cli_addr);
-// 	printf("Starting Server ...\n");
-// 	while (1) {
-// 		/* Accept actual connection from the client */
-// 		newsockfd = accept(sockfd, (struct sockaddr *) &cli_addr, &clilen);
-// 		if (newsockfd < 0) {
-// 			perror("ERROR on accept");
-// 			exit(1);
-// 		}
-// 		while (1) {
-
-// 			/* If connection is established then start communicating */
-// 			bzero(st1, max_size);
-// 			n = read(newsockfd, st1, max_size - 1);
-
-// 			if (n < 0) {
-// 				perror("ERROR reading from socket");
-// 				exit(1);
-// 			}
-// 			printf("SERVER received: %s\n", st1);
-
-// 			// do your evil bidding here
-// 			// char* ans = getSimilar(st1, M, vocab, words, size, bestw);
-// 			if (strcmp(ans, "-1") == 0) {
-
-// 				n = write(newsockfd, "BYE", strlen("BYE"));
-// 				close(newsockfd);
-// 				break;
-// 			}
-// 			// evil bidding should be done now
-
-// 			/* Write a response to the client */
-// 			n = write(newsockfd, ans, strlen(ans));
-// 			if (n < 0) {
-// 				perror("ERROR writing to socket");
-// 				exit(1);
-// 			}
-// 		}
-// 	}
-// 	return;
-
-// }
 
 int main(int argc, char **argv) {
   FILE *f;
